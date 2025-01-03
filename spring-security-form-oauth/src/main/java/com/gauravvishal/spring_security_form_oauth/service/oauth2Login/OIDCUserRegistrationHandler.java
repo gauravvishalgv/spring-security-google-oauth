@@ -20,8 +20,6 @@ public class OIDCUserRegistrationHandler {
 
         Map<String, Object> oAuth2Attr = oidcUser.getAttributes();
 
-        System.out.println("OAuth2 Attr: " + oAuth2Attr);
-
         User user = new User();
         user.setEmail(oAuth2Attr.get("email").toString());
         user.setFirstName(oAuth2Attr.get("given_name").toString());
@@ -35,10 +33,10 @@ public class OIDCUserRegistrationHandler {
         if(userOptional == null) {
             userRepo.save(user);
         } else {
-            user.setFirstName(oAuth2Attr.get("given_name").toString());
-            user.setLastName(oAuth2Attr.get("family_name").toString());
-            user.setImageUrl(oAuth2Attr.get("picture").toString());
-            userRepo.save(user);
+            userOptional.setFirstName(oAuth2Attr.get("given_name").toString());
+            userOptional.setLastName(oAuth2Attr.get("family_name").toString());
+            userOptional.setImageUrl(oAuth2Attr.get("picture").toString());
+            userRepo.save(userOptional);
         }
 
 		System.out.println("User Registered/Updated");
