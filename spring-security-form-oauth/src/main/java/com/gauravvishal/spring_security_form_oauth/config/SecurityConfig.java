@@ -12,7 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.gauravvishal.spring_security_form_oauth.service.MyUserDetailsService;
+import com.gauravvishal.spring_security_form_oauth.service.authentication.MyUserDetailsService;
+import com.gauravvishal.spring_security_form_oauth.service.oauth2Login.IdentityAuthenticationSuccessHandler;
 
 
 @Configuration
@@ -21,6 +22,9 @@ public class SecurityConfig {
 
     @Autowired
     private MyUserDetailsService userDetailsService;
+
+    @Autowired
+    private IdentityAuthenticationSuccessHandler identityAuthenticationSuccessHandler;
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,8 +44,9 @@ public class SecurityConfig {
                     registry.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2->
-                    oauth2.defaultSuccessUrl("http://localhost:3000", true)
-
+                    oauth2
+                        .defaultSuccessUrl("http://localhost:3000", true)
+                        .successHandler(identityAuthenticationSuccessHandler)
                 )
                 .formLogin(formLogin -> formLogin
                     .loginProcessingUrl("/perform-login")

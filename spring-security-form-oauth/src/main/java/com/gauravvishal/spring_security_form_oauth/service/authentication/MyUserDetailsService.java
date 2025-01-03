@@ -1,4 +1,4 @@
-package com.gauravvishal.spring_security_form_oauth.service;
+package com.gauravvishal.spring_security_form_oauth.service.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.gauravvishal.spring_security_form_oauth.model.User;
 import com.gauravvishal.spring_security_form_oauth.repo.UserRepo;
-
 
 
 @Service

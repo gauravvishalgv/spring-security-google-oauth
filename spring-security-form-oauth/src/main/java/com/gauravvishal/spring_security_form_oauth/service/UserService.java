@@ -31,6 +31,7 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setMobile(request.getMobile());
         user.setPassword(encoder.encode(request.getPassword()));
+        user.setAuthProvider("form");
 
         userRepo.save(user);
     }

@@ -17,17 +17,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "username")
+    @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "auth_provider")
+    private String authProvider;
+
     @Column(unique = true)
     private String email;
 
     @Column(unique = true)
-    private long mobile;
+    private String mobile;
 
     private String password;
 

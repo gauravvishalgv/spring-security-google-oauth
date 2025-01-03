@@ -7,6 +7,6 @@ public class RegisterUserRequest {
     private String firstName;
     private String lastName;
     private String email;
-    private Long mobile;
+    private String mobile;
     private String password;
 }

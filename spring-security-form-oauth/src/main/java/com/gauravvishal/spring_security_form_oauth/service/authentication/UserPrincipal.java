@@ -1,4 +1,4 @@
-package com.gauravvishal.spring_security_form_oauth.service;
+package com.gauravvishal.spring_security_form_oauth.service.authentication;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,6 +6,7 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 import com.gauravvishal.spring_security_form_oauth.model.User;
 
