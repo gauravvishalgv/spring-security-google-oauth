@@ -57,7 +57,7 @@ public class SecurityConfig {
                     .loginProcessingUrl("/perform-login")
                     .defaultSuccessUrl(frontendHomeUrl, true)
                     .failureHandler((request, response, exception) -> {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Set status 401 for failure
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); 
                         response.setContentType("application/json");
                         response.getWriter().write("{\"error\": \"Invalid username or password\"}");
                     })

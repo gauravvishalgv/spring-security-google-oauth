@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class FrontendConfigProperties {
     private String homeUrl;
-
+    private String loginUrl;
 }
 
 
