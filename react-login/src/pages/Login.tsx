@@ -13,6 +13,11 @@ const LoginPage: React.FC = () => {
     formData.append('username', username);
     formData.append('password', password);
 
+    if(!username || !password) {
+      alert('Please provide both username and password.');
+      return;
+    }
+
     fetch(AppConfig.userPasswordLoginUrl, {
       method: 'POST',
       body: formData,
@@ -42,13 +47,13 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 5, width: '100%', maxWidth: 400, borderRadius:5}}>
+    <Box sx = {{width: '100%', height:'100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <Paper elevation={3} sx={{ p: 5, maxWidth: 400, borderRadius:5}}>
         <Typography variant="h5" gutterBottom align="center">
           Wecome Back!
         </Typography>
 
-        <form onSubmit={handleLogin}>
-          <TextField
+        <TextField
             label="Username"
             variant="outlined"
             fullWidth
@@ -67,6 +72,7 @@ const LoginPage: React.FC = () => {
           />
 
           <Button
+            onClick={handleLogin}
             type="submit"
             variant="contained"
             color="primary"
@@ -75,7 +81,6 @@ const LoginPage: React.FC = () => {
           >
             Login
           </Button>
-        </form>
 
         <Box textAlign="center" my={2}>
           <Typography variant="body2" color="textSecondary">
@@ -102,6 +107,8 @@ const LoginPage: React.FC = () => {
           Login with GitHub
         </Button>
       </Paper>
+    </Box>
+    
   );
 };
 

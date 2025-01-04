@@ -3,6 +3,7 @@ package com.gauravvishal.spring_security_form_oauth.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,10 +16,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.gauravvishal.spring_security_form_oauth.service.authentication.MyUserDetailsService;
 import com.gauravvishal.spring_security_form_oauth.service.oauth2Login.IdentityAuthenticationSuccessHandler;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${frontend.homeUrl}")
+    private String frontendHomeUrl;
 
     @Autowired
     private MyUserDetailsService userDetailsService;
@@ -33,24 +39,28 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors ->cors.configurationSource(request -> {
                     var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+                    corsConfiguration.setAllowedOrigins(List.of(frontendHomeUrl));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
                     corsConfiguration.setAllowCredentials(true);
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/", "/user/register").permitAll();
+                    registry.requestMatchers("/", "/user/register", "perform-login").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2->
                     oauth2
-                        .defaultSuccessUrl("http://localhost:3000", true)
                         .successHandler(identityAuthenticationSuccessHandler)
                 )
                 .formLogin(formLogin -> formLogin
                     .loginProcessingUrl("/perform-login")
-                    .defaultSuccessUrl("http://localhost:3000", true)
+                    .defaultSuccessUrl(frontendHomeUrl, true)
+                    .failureHandler((request, response, exception) -> {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Set status 401 for failure
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\": \"Invalid username or password\"}");
+                    })
                 )
                 .logout(logout -> logout
                     .logoutUrl("/logout")

@@ -7,19 +7,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public final class IdentityAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-	private final AuthenticationSuccessHandler delegate = new SavedRequestAwareAuthenticationSuccessHandler();
+	@Value("${frontend.homeUrl}")
+    private String frontendHomeUrl;
 
     @Autowired
     private OIDCUserRegistrationHandler oidcHandler;
@@ -38,7 +39,8 @@ public final class IdentityAuthenticationSuccessHandler implements Authenticatio
 			}
 		}
 
-		this.delegate.onAuthenticationSuccess(request, response, authentication);
+		response.sendRedirect(frontendHomeUrl); // Redirect to the frontend home page
+
 	}
 
 
