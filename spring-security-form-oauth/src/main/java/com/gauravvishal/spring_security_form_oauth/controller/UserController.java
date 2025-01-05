@@ -3,6 +3,7 @@ package com.gauravvishal.spring_security_form_oauth.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +15,9 @@ import com.gauravvishal.spring_security_form_oauth.service.UserService;
 
 import jakarta.validation.Valid;
 
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -35,5 +37,11 @@ public class UserController {
     public Principal user(Principal principal){
         return principal;
     }
+
+    @GetMapping("/user-info")
+    public String getUserInfo(Principal principal) {
+        return principal.getName();
+    }
+    
 
 }

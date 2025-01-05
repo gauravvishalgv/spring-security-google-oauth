@@ -24,6 +24,7 @@ const LoginPage: React.FC = () => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
+      credentials: 'include',
     })
       .then((response) => {
         if (response.ok) {

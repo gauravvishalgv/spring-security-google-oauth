@@ -52,10 +52,20 @@ public class SecurityConfig {
                 .oauth2Login(oauth2->
                     oauth2
                         .successHandler(identityAuthenticationSuccessHandler)
+                        .failureHandler((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); 
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\": \"Invalid username or password\"}");
+                        })
                 )
                 .formLogin(formLogin -> formLogin
                     .loginProcessingUrl("/perform-login")
                     .defaultSuccessUrl(frontendHomeUrl, true)
+                    .successHandler((request, response, authentication) -> {
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"message\": \"Login successful\"}");
+                    })
                     .failureHandler((request, response, exception) -> {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); 
                         response.setContentType("application/json");
@@ -66,6 +76,19 @@ public class SecurityConfig {
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/login?logout=true")
                     .permitAll()
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // Return 401 Unauthorized for API requests instead of redirecting to the login page
+                            if (request.getRequestURI().startsWith("/api/")) {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.setContentType("application/json");
+                                response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                            } else {
+                                // For other endpoints, redirect to the login page
+                                response.sendRedirect("/login");
+                            }
+                        })
                 )
                 .build();
             
